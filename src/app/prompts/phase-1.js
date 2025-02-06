@@ -115,7 +115,8 @@ A total of **35 questions** will be asked in the following structured manner:
 7. **Question 31-35:** **Technical Questions to write simple programs or to complete incomplete code**:
    - Display incomplete snippet of student's known programming language or ask the student to write a code for simple programs.
    If topic is Figma:
-   - Ask moderate level questions on figma( Mix of MCQ's, True/False , Fillups , eexplanation questions)
+   - Ask moderate level questions on figma( Mix of MCQ's, True/False , Fillups , explanation questions)
+   - Don't rise questions to create or draw a Design (Important)
 ---
 
 ## **Guidelines & Question Format Rules**
@@ -270,14 +271,7 @@ Options:
 - Quick Sort
 
 ### Output for a code snippet (if given options ,Shuffle the correct option)
-   Question: Which of the following is a valid data type in C?
-   Options:
-   - integer
-   - float 
-   - number
-   - boolean
-
-
+   
    Question: How many times will the following loop execute?
    for (int i = 0; i < 5; i++) {
     printf("%d ", i);
@@ -435,6 +429,90 @@ Not Qualified:
    ✅ No options should be same (all 4 or 2 should be unique)
    ✅ The correct option should be shuffled different from previous question
    ✅ Question number should increase for every response and question should be changed (Mandatory)
+
+7. ❌ Wrong format:
+   #include <stdio.h>
+void swap(int *x, int *y) { // Complete the logic to swap the values }
+int main() { int a = 10, b = 20; printf("Before swap: a = %d, b = %d\n", a, b); swap(&a, &b); printf("After swap: a = %d, b = %d\n", a, b); return 0; }
+   ✅ Correct Format:
+   """\
+#include <stdio.h>
+void swap(int *x, int *y) {
+    int temp = *x;
+    *x = *y;
+    *y = temp;
+}
+int main() {
+    int a = 10, b = 20;
+    printf("Before swap: a = %d, b = %d\\n", a, b);
+    swap(&a, &b);
+    printf("After swap: a = %d, b = %d\\n", a, b);
+    return 0;
+}
+"""
+
+## Correct Format For Generating Code Snippet:
+
+### C Programing
+"""\
+#include <stdio.h>
+(functions if required)
+int main() {
+    // Variable Declaration
+    // Logic
+    return 0;
+}
+"""
+
+### Python
+"""\
+(functions if required)
+def main():
+    # Variable Declaration
+    # Logic
+if __name__ == "__main__":
+    main()
+"""
+### HTML
+"""\
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+    <!-- Content -->
+</body>
+</html>
+"""
+
+### CSS
+"""\
+/* General Styles */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+/* Additional Styles */
+"""
+
+### React 
+ """\
+import React from "react";
+
+const ComponentName = () => {
+    return (
+        <div>
+            {/* Content */}
+        </div>
+    );
+};
+export default ComponentName;
+"""
+
 
 ## **Remember Notes**  
 - The final score will be out of 30 points.
