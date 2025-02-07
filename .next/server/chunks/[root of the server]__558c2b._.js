@@ -702,8 +702,8 @@ async function POST(req) {
     console.log(questions);
     console.log(result.object);
     if (questions.some((q)=>{
-        const isOptionsMatching = q.options.length > 0 && result.object.options.length > 0 && JSON.stringify(q.options) === JSON.stringify(result.object.options);
-        const isCodeSnippetMatching = result.object.codeSnippet && result.object.codeSnippet.trim() !== "" && q.codeSnippet === result.object.codeSnippet;
+        const isOptionsMatching = Array.isArray(q.options) && Array.isArray(result.object.options) && q.options.length > 0 && result.object.options.length > 0 && JSON.stringify(q.options) === JSON.stringify(result.object.options);
+        const isCodeSnippetMatching = result.object.codeSnippet && typeof result.object.codeSnippet === "string" && result.object.codeSnippet.trim() !== "" && q.codeSnippet === result.object.codeSnippet;
         return isOptionsMatching || isCodeSnippetMatching;
     })) {
         messages.push({
@@ -711,7 +711,7 @@ async function POST(req) {
             content: `Question: ${result.object.question} already generated, generate a different question that is not in the messages array.`
         });
         result = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$ai$2f$dist$2f$index$2e$mjs__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__["generateObject"])({
-            model: google("gemini-1.5-flash-latest"),
+            model: google("gemini-2.0-flash-exp"),
             system: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$prompts$2f$phase$2d$1$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"],
             messages: messages,
             schema: schema,

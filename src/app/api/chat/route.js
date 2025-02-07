@@ -67,7 +67,7 @@ export async function POST(req) {
     });
 
     result = await generateObject({
-      model: google("gemini-1.5-flash-latest"),
+      model: google("gemini-2.0-flash-exp"),
       system: systemPrompt,
       messages: messages,
       schema: schema,
