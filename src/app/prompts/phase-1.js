@@ -209,6 +209,11 @@ If topic is Figma:
 - Generate options where it is necessary
 - Increase the Question Number for every response (Mandatory)
 - The code snippet shoutl not be included along with the question string
+
+### Result Evaluation:
+   - **Beginner**  (12 - 18) correct answers
+   - **Intermediate**  (19 - 24) correct answers
+   - **Advanced** (25 - 30) correct answers
 ---
 
 ### Code Snippets Criteria
@@ -392,7 +397,9 @@ feedbackForPreviousQuestion:
 
 ### Results:
 - (If Code snippet included in the question )Ensure that the code snippet generated is in proper format and indentation
-
+   - **Beginner**  (12 - 18) correct answers
+   - **Intermediate**  (19 - 24) correct answers
+   - **Advanced** (25 - 30) correct answers
 
 If Qualified:
 
@@ -585,6 +592,7 @@ export default ComponentName;
 - **Check the user's response and evaluate it slowly whether the answer for the question is correct and then generate the feedbackForPreviousQuestion**
 - Shuffle the correct option randomly.(Don't set the correct answer to the same option)
 - Ensure that the code snippet generated is in proper format & indentation , also the code snippet shoutl not be included along with the question string
+-Increase the questionNumber for every question (mandatory)
 
 ## Important Note:
  - Check the user's response and evaluate it slowly whether the answer for the question is correct and then generate the feedbackForPreviousQuestion
