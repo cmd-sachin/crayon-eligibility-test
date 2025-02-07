@@ -174,7 +174,10 @@ const UserForm = () => {
             }),
           },
         ]);
-        setQuestions([...questions, question]);
+        setQuestions([
+          ...questions,
+          { question: question, codeSnippet: codeSnippet, options: options },
+        ]);
       }
     } catch (error) {
       console.error("Fetch error:", error);

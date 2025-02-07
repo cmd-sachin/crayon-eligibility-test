@@ -43,12 +43,33 @@ export async function POST(req) {
   console.log(questions);
   console.log(result.object);
 
-  if (questions.includes(result.object.question) === true) {
+  if (
+    questions.some((q) => {
+      const isOptionsMatching =
+        Array.isArray(q.options) &&
+        Array.isArray(result.object.options) &&
+        q.options.length > 0 &&
+        result.object.options.length > 0 &&
+        JSON.stringify(q.options) === JSON.stringify(result.object.options);
+
+      const isCodeSnippetMatching =
+        result.object.codeSnippet &&
+        typeof result.object.codeSnippet === "string" &&
+        result.object.codeSnippet.trim() !== "" &&
+        q.codeSnippet === result.object.codeSnippet;
+
+      return isOptionsMatching || isCodeSnippetMatching;
+    })
+  ) {
+    messages.push({
+      role: "user",
+      content: `Question: ${result.object.question} already generated, generate a different question that is not in the messages array.`,
+    });
+
     result = await generateObject({
-      model: google("gemini-2.0-flash-exp"),
+      model: google("gemini-1.5-flash-latest"),
       system: systemPrompt,
       messages: messages,
-      prompt: `Question : ${result.object.question} already generated , generate a different question which is not is messages array `,
       schema: schema,
       temperature: 1,
     });

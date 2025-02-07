@@ -102,6 +102,14 @@ Gather initial details such as:
                                                                   }
 - The code snippet shoutl not be included along with the question string
 - If the question is repeated , a message (Question is repeated, generate new question) will be passed to you, and you should generate a different question which is not in the messages array
+- **Verify the the user response and evaluate th answer properly**
+- Question where code snippet is required:
+   1.Complete the partial/incomplete code : Generate incomplete code and ask the user to complete the functionality
+   2.Give a small piece of complete code snippet and ask the output of the code
+
+   rules: 
+   - Don't generate the complete snippet when the question is about completing a partial code or incomplete functionality
+
 
 ### **3. Answer Evaluation** (liberal evaluation)
 - For the questions like writing a program / completing a program, ignore minor syntax errors and evaluate the logic only;
@@ -251,7 +259,35 @@ If topic is Figma:
 - Generate options where it is necessary
 - Increase the Question Number for every response (Mandatory)
 - The code snippet shoutl not be included along with the question string
+
+### Result Evaluation:
+   - **Beginner**  (12 - 18) correct answers
+   - **Intermediate**  (19 - 24) correct answers
+   - **Advanced** (25 - 30) correct answers
 ---
+
+### Code Snippets Criteria
+
+   1. Completing the Partial/Incomplete Code
+   Task: Provide an incomplete code snippet and ask the user to complete the missing functionality.
+   Rule: Do not generate a fully functional snippet; leave gaps for the user to fill in.
+   Example Question:
+   function sumArray(arr) {
+    // Complete the function to return the sum of all elements
+   }
+   console.log(sumArray([1, 2, 3])); // Expected output: 6
+   Prompt: Fill in the missing logic to complete the function.
+
+   2. Predicting the Output of a Code Snippet
+   Task: Provide a small, complete code snippet and ask the user to determine its output.
+   Example Question:
+   let x = 10;
+   function modify(y) {
+      y = y + 5;
+   }
+   modify(x);
+   console.log(x);
+   Prompt: What will be printed on the console? Explain your answer.
 
 ## EXAMPLES
 
@@ -411,7 +447,9 @@ feedbackForPreviousQuestion:
 
 ### Results:
 - (If Code snippet included in the question )Ensure that the code snippet generated is in proper format and indentation
-
+   - **Beginner**  (12 - 18) correct answers
+   - **Intermediate**  (19 - 24) correct answers
+   - **Advanced** (25 - 30) correct answers
 
 If Qualified:
 
@@ -595,19 +633,21 @@ export default ComponentName;
 
 
 ## **Remember Notes**  
-- The final score will be out of 30 points.
 - Total of 35 unique questions, no repetitions under any circumstances.
 - Must provide the feedback for the previous question (Not applicable for lifeskill questions).
-- Focus on dynamic questioning and adaptive difficulty based on the student's performance.
 - Do not directly provide example questions.
 - The Technical Questions on student's topics, should cover all the known technical skills of the student (Like React, Node.js,Python,SQL....)
-- For code snippets, ensure proper indentation and it must not be included along with the question string.
 - Always move to the next question in any situation (never regenerate the same question).
 - Follow the Evaluation Process and Criteria.(The feedbackForPreviousQuestion should "Correct" only when the student's answer is correct)
+- **Check the user's response and evaluate it slowly whether the answer for the question is correct and then generate the feedbackForPreviousQuestion**
 - Shuffle the correct option randomly.(Don't set the correct answer to the same option)
 - Ensure that the code snippet generated is in proper format & indentation , also the code snippet shoutl not be included along with the question string
+-Increase the questionNumber for every question (mandatory)
 
-
+## Important Note:
+ - Check the user's response and evaluate it slowly whether the answer for the question is correct and then generate the feedbackForPreviousQuestion
+ - The feedbackForPreviousQuestion must be accurate whether it is Correct | Incorrect or Not Attempted
+ - feedbackForPreviousQuestion should not be given for 1-5 questions / lifeskill questions (mandatory)
 
 `;
 const __TURBOPACK__default__export__ = systemPrompt;
@@ -661,12 +701,19 @@ async function POST(req) {
     });
     console.log(questions);
     console.log(result.object);
-    if (questions.includes(result.object.question) === true) {
+    if (questions.some((q)=>{
+        const isOptionsMatching = q.options.length > 0 && result.object.options.length > 0 && JSON.stringify(q.options) === JSON.stringify(result.object.options);
+        const isCodeSnippetMatching = result.object.codeSnippet && result.object.codeSnippet.trim() !== "" && q.codeSnippet === result.object.codeSnippet;
+        return isOptionsMatching || isCodeSnippetMatching;
+    })) {
+        messages.push({
+            role: "user",
+            content: `Question: ${result.object.question} already generated, generate a different question that is not in the messages array.`
+        });
         result = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$ai$2f$dist$2f$index$2e$mjs__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__["generateObject"])({
-            model: google("gemini-2.0-flash-exp"),
+            model: google("gemini-1.5-flash-latest"),
             system: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$prompts$2f$phase$2d$1$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"],
             messages: messages,
-            prompt: `Question : ${result.object.question} already generated , generate a different question which is not is messages array `,
             schema: schema,
             temperature: 1
         });

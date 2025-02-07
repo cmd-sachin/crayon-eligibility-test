@@ -597,7 +597,7 @@ export default ComponentName;
 ## Important Note:
  - Check the user's response and evaluate it slowly whether the answer for the question is correct and then generate the feedbackForPreviousQuestion
  - The feedbackForPreviousQuestion must be accurate whether it is Correct | Incorrect or Not Attempted
-
+ - feedbackForPreviousQuestion should not be given for 1-5 questions / lifeskill questions (mandatory)
 
 `;
 
