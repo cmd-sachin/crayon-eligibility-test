@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
-import rehypeHighlight from "rehype-highlight";
+import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import {
   Box,
   Checkbox,
@@ -36,9 +37,9 @@ const UserForm = () => {
     domain: "",
     topics: [],
   });
-
+  const [questions, setQuestions] = useState([]);
   const [isTestStarted, setIsTestStarted] = useState(false);
-  const [questionNumber, setQuestionNumber] = useState(1);
+  const [questionNumber, setQuestionNumber] = useState(0);
   const [currentQuestion, setCurrentQuestion] = useState(null);
   const [selectedAnswer, setSelectedAnswer] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -104,6 +105,7 @@ const UserForm = () => {
       setIsLoading(true);
 
       const requestBody = {
+        questions,
         questionNumber,
         messages: [
           ...messages,
@@ -133,10 +135,10 @@ const UserForm = () => {
         }
       } else {
         const {
-          questionNumber,
           question,
           options = [],
           feedbackForPreviousQuestion,
+          codeSnippet,
         } = data.result;
         if (feedbackForPreviousQuestion.toLowerCase() == "correct") {
           setScore(score + 1);
@@ -144,10 +146,11 @@ const UserForm = () => {
         setCurrentQuestion({
           question,
           options,
+          codeSnippet,
           feedbackForPreviousQuestion,
         });
 
-        setQuestionNumber(questionNumber);
+        setQuestionNumber(questionNumber + 1);
 
         // Constructing the message
         const feedbackMessage =
@@ -166,10 +169,12 @@ const UserForm = () => {
               question: question,
               options: options,
               feedbackForPreviousQuestion: feedbackForPreviousQuestion,
+              codeSnippet: codeSnippet,
               currentScore: score,
             }),
           },
         ]);
+        setQuestions([...questions, question]);
       }
     } catch (error) {
       console.error("Fetch error:", error);
@@ -491,10 +496,17 @@ const UserForm = () => {
               )}
 
             <Typography variant="h6" sx={{ mb: 3, fontWeight: 300 }}>
-              <ReactMarkdown rehypePlugins={[rehypeHighlight]}>
-                {currentQuestion?.question}
-              </ReactMarkdown>
+              <ReactMarkdown>{currentQuestion?.question}</ReactMarkdown>
             </Typography>
+
+            {currentQuestion.codeSnippet &&
+              !["", "null", "none"].includes(currentQuestion.codeSnippet) && (
+                <Typography variant="h6" sx={{ mb: 3, fontWeight: 300 }}>
+                  <SyntaxHighlighter language="Javascript" style={atomDark}>
+                    {currentQuestion.codeSnippet}
+                  </SyntaxHighlighter>
+                </Typography>
+              )}
 
             <form onSubmit={handleSubmit}>
               {currentQuestion?.options?.length > 0 ? (

@@ -8,11 +8,12 @@ const google = createGoogleGenerativeAI({
 });
 
 export async function POST(req) {
-  const { messages, questionNumber } = await req.json();
+  const { messages, questionNumber, questions } = await req.json();
 
   const questionSchema = z.object({
     questionNumber: z.number(),
     question: z.string(),
+    codeSnippet: z.string().optional(),
     options: z.array(z.string()).optional(),
     feedbackForPreviousQuestion: z.string(),
   });
@@ -31,13 +32,27 @@ export async function POST(req) {
     schema = finalResultSchema;
   }
 
-  const result = await generateObject({
+  let result = await generateObject({
     model: google("gemini-2.0-flash-exp"),
     system: systemPrompt,
     messages: messages,
     schema: schema,
     temperature: 1,
   });
+
+  console.log(questions);
+  console.log(result.object);
+
+  if (questions.includes(result.object.question) === true) {
+    result = await generateObject({
+      model: google("gemini-2.0-flash-exp"),
+      system: systemPrompt,
+      messages: messages,
+      prompt: `Question : ${result.object.question} already generated , generate a different question which is not is messages array `,
+      schema: schema,
+      temperature: 1,
+    });
+  }
 
   return new Response(JSON.stringify({ result: result.object }), {
     headers: { "Content-Type": "application/json" },
