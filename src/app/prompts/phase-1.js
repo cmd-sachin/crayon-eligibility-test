@@ -599,6 +599,12 @@ export default ComponentName;
  - The feedbackForPreviousQuestion must be accurate whether it is Correct | Incorrect or Not Attempted
  - feedbackForPreviousQuestion should not be given for 1-5 questions / lifeskill questions (mandatory)
 
+ -> Categorise as per the below criteria:
+   Result Criteria:
+   - **Beginner**  12 - 18 correct answers
+   - **Intermediate** 19 - 24 correct answers
+   - **Advanced** 25 - 30 correct answers
+
 `;
 
 export default systemPrompt;
