@@ -78,7 +78,7 @@ const UserForm = () => {
           Name: userInfo.name,
           Reg_No: userInfo.regNo,
           Year_of_Study: userInfo.yearOfStudy,
-          Domain: userInfo.areaOfInterest,
+          Domain: userInfo.domain,
           Topics: userInfo.topics,
         }),
       },
@@ -87,7 +87,7 @@ const UserForm = () => {
     await fetchQuestion();
   };
 
-  // Add this inside your UserForm component, before the return statements
+  // Get the section name based on the current question number
   const getSectionName = (questionNumber) => {
     if (questionNumber >= 1 && questionNumber <= 5)
       return "Section A - Life Skills";
@@ -129,7 +129,7 @@ const UserForm = () => {
       if (questionNumber === 35) {
         setFinalResult(data.result);
         if (
-          data.result.feedbackForPreviousQuestion.toLowerCase() == "correct"
+          data.result.feedbackForPreviousQuestion.toLowerCase() === "correct"
         ) {
           setScore(score + 1);
         }
@@ -140,7 +140,7 @@ const UserForm = () => {
           feedbackForPreviousQuestion,
           codeSnippet,
         } = data.result;
-        if (feedbackForPreviousQuestion.toLowerCase() == "correct") {
+        if (feedbackForPreviousQuestion.toLowerCase() === "correct") {
           setScore(score + 1);
         }
         setCurrentQuestion({
@@ -206,6 +206,7 @@ const UserForm = () => {
       <Box
         sx={{
           display: "flex",
+          flexDirection: "column", // Stack logo and card vertically
           justifyContent: "center",
           alignItems: "center",
           minHeight: "100vh",
@@ -213,7 +214,7 @@ const UserForm = () => {
           p: 2,
         }}
       >
-        <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
+        <Box sx={{ mb: 2 }}>
           <img src="/icon.png" alt="Logo" style={{ maxWidth: "150px" }} />
         </Box>
         <Card
@@ -271,6 +272,7 @@ const UserForm = () => {
       <Box
         sx={{
           display: "flex",
+          flexDirection: "column", // Stack logo and card vertically
           justifyContent: "center",
           alignItems: "center",
           minHeight: "100vh",
@@ -278,7 +280,7 @@ const UserForm = () => {
           p: 2,
         }}
       >
-        <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
+        <Box sx={{ mb: 2 }}>
           <img src="/icon.png" alt="Logo" style={{ maxWidth: "150px" }} />
         </Box>
         <Card
@@ -352,7 +354,7 @@ const UserForm = () => {
                       setUserInfo((p) => ({
                         ...p,
                         domain: e.target.value,
-                        // Reset topics when area changes
+                        // Reset topics when domain changes
                         topics: p.topics.filter((topic) =>
                           areaToSkills[e.target.value].includes(topic)
                         ),
@@ -448,7 +450,7 @@ const UserForm = () => {
         p: 2,
       }}
     >
-      {currentQuestion ? ( // Only show if currentQuestion exists
+      {currentQuestion ? (
         <Card
           sx={{
             maxWidth: 800,
@@ -574,14 +576,13 @@ const UserForm = () => {
                 {isLoading ? (
                   <CircularProgress size={24} sx={{ color: "white" }} />
                 ) : (
-                  "Submit Answer "
+                  "Submit Answer"
                 )}
               </Button>
             </form>
           </CardContent>
         </Card>
       ) : (
-        // Show loading state or empty state when no question is generated
         <CircularProgress />
       )}
     </Box>
