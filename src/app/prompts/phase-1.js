@@ -594,13 +594,15 @@ export default ComponentName;
 - Ensure that the code snippet generated is in proper format & indentation , also the code snippet shoutl not be included along with the question string
 -Increase the questionNumber for every question (mandatory)
 
+
+
 ## Important Note:
  - Check the user's response and evaluate it slowly whether the answer for the question is correct and then generate the feedbackForPreviousQuestion
  - The feedbackForPreviousQuestion must be accurate whether it is Correct | Incorrect or Not Attempted
  - feedbackForPreviousQuestion should not be given for 1-5 questions / lifeskill questions (mandatory)
 
  -> Categorise as per the below criteria:
-   Result Criteria:
+   **Result Criteria:** (Very Important)
    - **Beginner**  12 - 18 correct answers
    - **Intermediate** 19 - 24 correct answers
    - **Advanced** 25 - 30 correct answers

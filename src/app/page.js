@@ -213,6 +213,9 @@ const UserForm = () => {
           p: 2,
         }}
       >
+        <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
+          <img src="/icon.png" alt="Logo" style={{ maxWidth: "150px" }} />
+        </Box>
         <Card
           sx={{
             maxWidth: 600,
@@ -275,6 +278,9 @@ const UserForm = () => {
           p: 2,
         }}
       >
+        <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
+          <img src="/icon.png" alt="Logo" style={{ maxWidth: "150px" }} />
+        </Box>
         <Card
           sx={{
             maxWidth: 600,
